@@ -11,10 +11,10 @@ from setuptools import setup, find_packages
 INSTALL_REQS = parse_requirements('requirements.txt', session='hack')
 
 setup(
-    name='pacifica-service',
+    name='pacifica-python-downloader',
     use_scm_version=True,
     setup_requires=['setuptools_scm'],
-    description='Pacifica Configuration Parser',
+    description='Pacifica Python Downloader',
     author='David Brown',
     author_email='david.brown@pnnl.gov',
     packages=find_packages(),
