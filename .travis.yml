@@ -1,12 +1,21 @@
 language: python
+services:
+- rabbitmq
+- mysql
 python:
 - 2.7
 - 3.6
+
+env:
+- MYSQL_ENV_MYSQL_USER=travis
 
 stages:
 - lint
 - test
 
+before_script:
+- pushd travis/archive; ArchiveInterface.py --config config.cfg & popd
+- pushd travis/cartd; CartServer.py & celery -A cart worker -l info -P solo & popd
 script:
 - coverage run --include='pacifica/*' -m pytest -v
 - coverage report -m --fail-under 100
