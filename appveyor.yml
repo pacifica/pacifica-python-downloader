@@ -33,6 +33,7 @@ test_script:
       $env:PATH = "${env:MYSQL_PATH}\bin;${env:PATH}";
       mkdir C:\tmp; C:\pacifica\Scripts\activate.ps1;
       pre-commit run -a;
+      ls "${env:MYSQL_PATH}\bin";
       mysqladmin --host=$env:MYSQL_HOST --user=$env:MYSQL_USER --password=$env:MYSQL_PASSWORD create pacifica_cart;
       $ai_proc = Start-Process C:\pacifica\Scripts\python.exe -ArgumentList "C:\pacifica\Scripts\ArchiveInterfaceServer.py --config config.cfg" -WorkingDirectory 'travis\archive' -PassThru -RedirectStandardError archive-error.log -RedirectStandardOutput archive-output.log;
       $env:ARCHIVEI_PORT_8080_TCP_ADDR = '127.0.0.1';
