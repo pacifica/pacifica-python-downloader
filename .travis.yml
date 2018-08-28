@@ -14,6 +14,7 @@ stages:
 - test
 
 before_script:
+- mysql -e 'CREATE DATABASE pacifica_cart;'
 - pushd travis/archive; ArchiveInterface --config config.cfg & popd
 - pushd travis/cartd; CartServer & celery -A cart worker -l info -P solo & popd
 - sleep 4
