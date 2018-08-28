@@ -30,7 +30,7 @@ build: off
 
 test_script:
   - ps: >
-      $env:PATH = $env:MYSQL_PATH\bin;$env:PATH;
+      $env:PATH = "${env:MYSQL_PATH}\bin;${env:PATH}";
       mkdir C:\tmp; C:\pacifica\Scripts\activate.ps1;
       pre-commit run -a;
       mysqladmin --host=$env:MYSQL_HOST --user=$env:MYSQL_USER --password=$env:MYSQL_PASSWORD create pacifica_cart
