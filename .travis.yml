@@ -8,13 +8,14 @@ python:
 
 env:
 - MYSQL_ENV_MYSQL_USER=travis
+- MYSQL_ENV_MYSQL_PASSWORD=
 
 stages:
 - lint
 - test
 
 before_script:
-- pushd travis/archive; ArchiveInterface.py --config config.cfg & popd
+- pushd travis/archive; ArchiveInterfaceServer.py --config config.cfg & popd
 - pushd travis/cartd; CartServer.py & celery -A cart worker -l info -P solo & popd
 script:
 - coverage run --include='pacifica/*' -m pytest -v
