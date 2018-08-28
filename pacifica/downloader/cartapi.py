@@ -3,6 +3,7 @@
 """Cart API module for interacting with carts."""
 from __future__ import print_function
 import sys
+import logging
 from uuid import uuid4 as uuid
 import time
 from json import dumps
@@ -40,7 +41,7 @@ class CartAPI(object):
             if resp_code == 204 and resp_status != 'staging':
                 break
             if resp_code == 500:  # pragma: no cover
-                print(resp_message, file=sys.stderr)
+                logging.error(resp_message)
                 break
             time.sleep(2)
         assert resp_status == 'ready'
