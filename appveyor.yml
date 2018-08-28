@@ -43,6 +43,7 @@ test_script:
       sleep 4;
       python test_files\archiveinterfacepreload.py;
       Get-Content server-error.log; Get-Content server-output.log;
+      Get-Content celery-error.log; Get-Content celery-output.log;
       coverage run --include='pacifica/*' -m pytest -v;
       celery -A cart control shutdown;
       $front_proc | Wait-Process;
