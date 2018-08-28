@@ -44,5 +44,7 @@ test_script:
       python test_files\archiveinterfacepreload.py;
       coverage run --include='pacifica/*' -m pytest -v;
       celery -A cart control shutdown;
-      $front_proc | Wait-Process;
+      $back_proc | Stop-Process;
+      $front_proc | Stop-Process;
+      $ai_proc | Stop-Process;
       coverage report -m --fail-under=100;
