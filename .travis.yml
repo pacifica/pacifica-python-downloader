@@ -7,8 +7,7 @@ python:
 - 3.6
 
 env:
-- MYSQL_ENV_MYSQL_USER=travis
-- MYSQL_ENV_MYSQL_PASSWORD=
+- MYSQL_ENV_MYSQL_USER=travis MYSQL_ENV_MYSQL_PASSWORD=
 
 stages:
 - lint
