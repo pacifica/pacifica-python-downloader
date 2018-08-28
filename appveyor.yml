@@ -23,7 +23,7 @@ install:
       nuget install redis-64 -excludeversion;
       redis-64\tools\redis-server.exe --service-install;
       redis-64\tools\redis-server.exe --service-start;
-      python -m pip install redis;
+      python -m pip install redis eventlet;
       python -m pip install -r requirements-dev.txt;
 
 build: off
@@ -42,8 +42,6 @@ test_script:
       $front_proc = Start-Process C:\pacifica\Scripts\CartServer.exe -WorkingDirectory 'travis\cartd' -PassThru -RedirectStandardError server-error.log -RedirectStandardOutput server-output.log;
       sleep 4;
       python test_files\archiveinterfacepreload.py;
-      Get-Content server-error.log; Get-Content server-output.log;
-      Get-Content celery-error.log; Get-Content celery-output.log;
       coverage run --include='pacifica/*' -m pytest -v;
       celery -A cart control shutdown;
       $front_proc | Wait-Process;
