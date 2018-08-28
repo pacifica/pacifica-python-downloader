@@ -1,8 +1,9 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 """Cloud Event Parser."""
-from os.path import join
 
 
+# pylint: disable=too-few-public-methods
 class CloudEvent(object):
     """Cloud Event Parser."""
 
@@ -20,3 +21,4 @@ class CloudEvent(object):
                         'hashtype': obj.get('hashtype', False)
                     }
         return ce_yield_files
+# pylint: enable=too-few-public-methods

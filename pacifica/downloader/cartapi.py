@@ -1,9 +1,13 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 """Cart API module for interacting with carts."""
+from __future__ import print_function
+import sys
 from uuid import uuid4 as uuid
 import time
 from json import dumps
 import requests
+
 
 class CartAPI(object):
     """Cart api object for manipulating carts."""

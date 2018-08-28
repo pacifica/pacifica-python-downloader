@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 """The Downloader internal Module."""
 import tarfile
 from os import pipe, fdopen
@@ -7,6 +8,8 @@ import requests
 from .cloudevent import CloudEvent
 from .cartapi import CartAPI
 
+
+# pylint: disable=too-few-public-methods
 class Downloader(object):
     """Downloader Class."""
 
@@ -17,12 +20,10 @@ class Downloader(object):
 
     def _download_from_url(self, cart_url, filename):
         """Download the cart from the url."""
-
         def unpack_tarfile(read_pipe):
             """worker thread for unpacking tarfile."""
             cart_tar = tarfile.open(name=None, mode='r|', fileobj=read_pipe)
             cart_tar.extractall(self.location)
-
 
         def pipefds():
             """Setup a pipe but return file objects instead."""
@@ -51,3 +52,4 @@ class Downloader(object):
             ),
             filename
         )
+# pylint: enable=too-few-public-methods
