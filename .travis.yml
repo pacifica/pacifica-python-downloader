@@ -16,6 +16,7 @@ stages:
 before_script:
 - pushd travis/archive; ArchiveInterface --config config.cfg & popd
 - pushd travis/cartd; CartServer & celery -A cart worker -l info -P solo & popd
+- sleep 4
 - python test_files/archiveinterfacepreload.py
 script:
 - coverage run --include='pacifica/*' -m pytest -v
