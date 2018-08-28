@@ -28,6 +28,9 @@ install:
 
 build: off
 
+services:
+  - mysql
+
 test_script:
   - ps: >
       mkdir C:\tmp; C:\pacifica\Scripts\activate.ps1;
