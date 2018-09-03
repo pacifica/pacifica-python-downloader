@@ -57,7 +57,8 @@ ready to download.
 
 ### CloudEvent
 
-The `CloudEvent` class contains the `cloudevent()` method. It
+The `CloudEvent` class ([here](pacifica/downloader/cloudevent.py#7))
+contains the `cloudevent()` method. It
 requires the cloud event as an argument. The `cloudevent()`
 generates a method that yields the cart file objects from the
 cloud event.
