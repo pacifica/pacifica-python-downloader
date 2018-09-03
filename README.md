@@ -11,9 +11,9 @@ download data from Pacifica.
 
 ## Downloader API
 
-The entrypoint for this library is the `Downloader` class in 
+The entrypoint for this library is the `Downloader` class in
 the `downloader` module. Instances of this class are created
-with a download directory and a 
+with a download directory and a
 [Pacifica Cartd](https://github.com/pacifica/pacifica-cartd)
 endpoint url.
 
@@ -31,7 +31,7 @@ defined in the constructor.
 
 [CloudEvents](https://github.com/cloudevents/spec) is a
 standard for how to send messages between services in cloud
-environments. The `cloudevent()` method 
+environments. The `cloudevent()` method
 ([here](pacifica/downloader/downloader.py#45))
 consumes the event emitted by the
 [Pacifica Notifications](https://github.com/pacifica/pacifica-notifications)
