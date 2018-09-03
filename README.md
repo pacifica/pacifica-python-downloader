@@ -39,3 +39,25 @@ service and downloads the data.
 
 ## Internal Classes and Methods
 
+The internal classes help organize the work around the cart API.
+
+### Cart API
+
+The [CartAPI](pacifica/downloader/cartapi.py#11) class has two
+methods used for setting up a cart and waiting for completion.
+
+The `setup_cart()` method takes a callable argument that returns
+an iterator. The iterator returns a list that is directly sent to
+the [Cartd API](https://github.com/pacifica/pacifica-cartd). The
+`setup_cart()` method returns the full url to the cart created.
+
+The `wait_for_cart()` method takes a cart url returned from the
+`setup_cart()` method and polls the endpoint until the cart is
+ready to download.
+
+### CloudEvent
+
+The `CloudEvent` class contains the `cloudevent()` method. It
+requires the cloud event as an argument. The `cloudevent()`
+generates a method that yields the cart file objects from the
+cloud event.
