@@ -62,3 +62,23 @@ contains the `cloudevent()` method. It
 requires the cloud event as an argument. The `cloudevent()`
 generates a method that yields the cart file objects from the
 cloud event.
+
+## Examples
+
+### CloudEvents Example
+
+This is a basic stub code to download data from a cloud event.
+This assumes the cloudevent is saved to a file for processing.
+There are a number of ways to get the cloud event this is just
+a minimum representation of whats required.
+
+```
+from json import loads
+from tempfile import mkdtemp
+from pacifica.downloader import Downloader
+
+cloud_event = loads(open('cloudevent.json').read())
+down_path = mkdtemp()
+down = Downloader(down_path, 'http://metadata.example.com')
+down.cloudevent(cloud_event)
+```
