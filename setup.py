@@ -11,7 +11,7 @@ from setuptools import setup, find_packages
 INSTALL_REQS = parse_requirements('requirements.txt', session='hack')
 
 setup(
-    name='pacifica-python-downloader',
+    name='pacifica-downloader',
     use_scm_version=True,
     setup_requires=['setuptools_scm'],
     description='Pacifica Python Downloader',
