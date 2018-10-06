@@ -42,7 +42,9 @@ test_script:
       $front_proc = Start-Process C:\pacifica\Scripts\CartServer.exe -WorkingDirectory 'travis\cartd' -PassThru -RedirectStandardError server-error.log -RedirectStandardOutput server-output.log;
       sleep 4;
       python test_files\archiveinterfacepreload.py;
-      coverage run --include='pacifica/*' -m pytest -v;
+      pip install .;
+      cd tests;
+      coverage run --include='*/site-packages/pacifica/downloader/*' -m pytest -v;
       celery -A cart control shutdown;
       $back_proc | Stop-Process;
       $front_proc | Stop-Process;

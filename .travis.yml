@@ -15,7 +15,9 @@ stages:
 - sleep 4
 - python test_files/archiveinterfacepreload.py
 ".script": &1
-- coverage run --include='pacifica/*' -m pytest -v
+- pip install .
+- cd tests
+- coverage run --include '*/site-packages/pacifica/downloader/*' -m pytest -v
 - coverage report -m --fail-under 100
 - if [[ $CODECLIMATE_REPO_TOKEN ]] ; then codeclimate-test-reporter; fi
 jobs:
