@@ -1,25 +1,25 @@
 language: python
 services:
 - rabbitmq
-- mysql
-env:
-- MYSQL_ENV_MYSQL_USER=travis MYSQL_ENV_MYSQL_PASSWORD=
 stages:
 - lint
 - test
 - deploy
 ".before_script": &2
-- mysql -e 'CREATE DATABASE pacifica_cart;'
-- pushd travis/archive; ArchiveInterface --config config.cfg & popd
-- pushd travis/cartd; CartServer & celery -A cart worker -l info -P solo & popd
+- export CARTD_CPCONFIG="$PWD/travis/cartd/server.conf"
+- export ARCHIVEINTERFACE_CPCONFIG="$PWD/travis/archive/server.conf"
+- export ARCHIVEINTERFACE_CONFIG="$PWD/travis/archive/config.cfg"
+- pacifica-archiveinterface & echo $! > archive.pid
+- pacifica-cartd-cmd dbsync
+- pacifica-cartd & echo $! > cartd.pid
+- celery -A pacifica.cartd.tasks worker -l info -P solo -c 1 & echo $! > celery.pid
 - sleep 4
 - python test_files/archiveinterfacepreload.py
 ".script": &1
 - pip install .
 - cd tests
-- coverage run --include '*/site-packages/pacifica/downloader/*' -m pytest -v
+- coverage run --include '*/site-packages/pacifica/downloader/*' -m pytest -xv
 - coverage report -m --fail-under 100
-- if [[ $CODECLIMATE_REPO_TOKEN ]] ; then codeclimate-test-reporter; fi
 jobs:
   include:
   - stage: lint
@@ -46,7 +46,7 @@ jobs:
       user: dmlb2000
       distributions: sdist bdist_wheel
       password:
-        secure: Lfg7Bb1DCcBzuKNVT7xeqhlR9kRz33CSon38j0gQ3o1/P4GA8oasUaqRRyyTyflkthDFxaR/d3qIDXRoQ+g0LaVoffOxW0V/f3krxgRPM4IYgcSfVMwhbz2RDC5U/o6a0H/jN9PO+UlY2diWLKFSmpIKe9o0U23IfKue6qPrKcrAJCQsVC4rOckL74rTO3zA6Z2w4x0LkR2T40oDbi/RjcEJBNw/Vm2/t3fym3XnFhVPGqPea3n6eS/4yRBcdNeH41uyLImAbdwIgmFDwItxJnQzmXZJyaRJkj8/XJw4ZknWhaR+IbkqNiF3tt3nq77e38ru1iDjY4IJMPoiplL4w09NxOhzGHKV6/kfq1dUqEtjiYbVsFyJcUP5iB9hy0xEwoJA3Y09LsqGfPC34Kg/Dv0fERk/ch6UvTqpDNixZslokhPX4R9IK2OcP1jdk5DZyT4WK7cEnDYNATN+yP49whbunCWSM0UKNn7eUjEuPGwhrfvXX4A1qTnelPD/IXMcszZ7kF73Fre/lldlqtUJRPInWPW39UrYO+JDL7B1YG0/dDfF6pRihmODkTm5/Tvbq3T1HLVUm0nhn/4jOACIp07uL8hQeKf3G51ZGZNUIRyY8sEqiB6VWWEGQVgSx/zlZ6uwftE0voMX7mHoULuEjBDqlCpAI6GFXOd65YlORlI=
+        secure: atBJ8Qm8DUAfGBarfjOqt49Sdjcz0Cn4a6vYsT3zR5tY9KUISeZppIzvTTDoKyeUlHrc/djaIxV57CjPP24oDIktHdS8VoZZ/zJVa0CQabQrbmGi6JPhfcQuo388qnhFoJgT3rXE1ZxOc/Zjo2fIoM2w/2h4aIwiibO9EWVifRynDyUxpCjYuJ+T3shUYg4+cLfpxhy20/+s8RJkT/bZwihyfwrbBmayYl2uxWDVrZwsz1S3cW6LOjHlYh/gJQur9oW9d99ed9jmL15abJZkFCUOQx0gdVp0WLysMUON7vYYm0pSZXZ7+vn8hqejdEOTK5qr1N9pKAOEORSxQ4r35oZSk+KF88OZBnuGmbjAo93V6aDR+9rKvH5jk16ArviWp5MbdYprhvW+yPVxdh8mwHOnYAbLqRnGfbglSJqTJZ1kXTyjrezVipfH2O+8JO5zxWXHABidG8BIqA649Rw2GPWgov7Ri8dv5qfDLbvdsRkC2Yj47OFCoeNQacTnsLS0z1h+bvuREiXx953duOHLFfi1YhRxl85Ch6QqarL078wlCAVRFPPaiVrP8qFYqFifb9ex71lKEpFJwhEv/gwfr0NcAaOhXJ6IFhX74k3kOUze39BA2Y9rBul8x1KuJ7C8MRLquFceOdiY5iUvdxgS+/036du5JOhcov3fuQe/6UM=
       on:
         tags: true
   - services: []
@@ -60,9 +60,8 @@ jobs:
       user: dmlb2000
       distributions: bdist_wheel
       password:
-        secure: Lfg7Bb1DCcBzuKNVT7xeqhlR9kRz33CSon38j0gQ3o1/P4GA8oasUaqRRyyTyflkthDFxaR/d3qIDXRoQ+g0LaVoffOxW0V/f3krxgRPM4IYgcSfVMwhbz2RDC5U/o6a0H/jN9PO+UlY2diWLKFSmpIKe9o0U23IfKue6qPrKcrAJCQsVC4rOckL74rTO3zA6Z2w4x0LkR2T40oDbi/RjcEJBNw/Vm2/t3fym3XnFhVPGqPea3n6eS/4yRBcdNeH41uyLImAbdwIgmFDwItxJnQzmXZJyaRJkj8/XJw4ZknWhaR+IbkqNiF3tt3nq77e38ru1iDjY4IJMPoiplL4w09NxOhzGHKV6/kfq1dUqEtjiYbVsFyJcUP5iB9hy0xEwoJA3Y09LsqGfPC34Kg/Dv0fERk/ch6UvTqpDNixZslokhPX4R9IK2OcP1jdk5DZyT4WK7cEnDYNATN+yP49whbunCWSM0UKNn7eUjEuPGwhrfvXX4A1qTnelPD/IXMcszZ7kF73Fre/lldlqtUJRPInWPW39UrYO+JDL7B1YG0/dDfF6pRihmODkTm5/Tvbq3T1HLVUm0nhn/4jOACIp07uL8hQeKf3G51ZGZNUIRyY8sEqiB6VWWEGQVgSx/zlZ6uwftE0voMX7mHoULuEjBDqlCpAI6GFXOd65YlORlI=
+        secure: atBJ8Qm8DUAfGBarfjOqt49Sdjcz0Cn4a6vYsT3zR5tY9KUISeZppIzvTTDoKyeUlHrc/djaIxV57CjPP24oDIktHdS8VoZZ/zJVa0CQabQrbmGi6JPhfcQuo388qnhFoJgT3rXE1ZxOc/Zjo2fIoM2w/2h4aIwiibO9EWVifRynDyUxpCjYuJ+T3shUYg4+cLfpxhy20/+s8RJkT/bZwihyfwrbBmayYl2uxWDVrZwsz1S3cW6LOjHlYh/gJQur9oW9d99ed9jmL15abJZkFCUOQx0gdVp0WLysMUON7vYYm0pSZXZ7+vn8hqejdEOTK5qr1N9pKAOEORSxQ4r35oZSk+KF88OZBnuGmbjAo93V6aDR+9rKvH5jk16ArviWp5MbdYprhvW+yPVxdh8mwHOnYAbLqRnGfbglSJqTJZ1kXTyjrezVipfH2O+8JO5zxWXHABidG8BIqA649Rw2GPWgov7Ri8dv5qfDLbvdsRkC2Yj47OFCoeNQacTnsLS0z1h+bvuREiXx953duOHLFfi1YhRxl85Ch6QqarL078wlCAVRFPPaiVrP8qFYqFifb9ex71lKEpFJwhEv/gwfr0NcAaOhXJ6IFhX74k3kOUze39BA2Y9rBul8x1KuJ7C8MRLquFceOdiY5iUvdxgS+/036du5JOhcov3fuQe/6UM=
       on:
         tags: true
-
 install:
 - pip install -r requirements-dev.txt
