@@ -4,7 +4,7 @@
 import requests
 
 SESSION = requests.Session()
-for i in range(100, 110):
+for i in range(1100, 1110):
     resp = SESSION.put(
         'http://127.0.0.1:8080/{}'.format(i),
         data='The data for file {}.\n'.format(i)
