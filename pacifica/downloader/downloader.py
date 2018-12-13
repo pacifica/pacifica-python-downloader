@@ -2,14 +2,12 @@
 # -*- coding: utf-8 -*-
 """The Downloader internal Module."""
 import tarfile
-from os import pipe, fdopen
-from threading import Thread
 import requests
 from .cloudevent import CloudEvent
 from .cartapi import CartAPI
+from .policy import TransactionInfo
 
 
-# pylint: disable=too-few-public-methods
 class Downloader(object):
     """Downloader Class."""
 
@@ -20,27 +18,21 @@ class Downloader(object):
 
     def _download_from_url(self, cart_url, filename):
         """Download the cart from the url."""
-        def unpack_tarfile(read_pipe):
-            """worker thread for unpacking tarfile."""
-            cart_tar = tarfile.open(name=None, mode='r|', fileobj=read_pipe)
-            cart_tar.extractall(self.location)
+        resp = requests.get('{}?filename={}'.format(cart_url, filename), stream=True)
+        cart_tar = tarfile.open(name=None, mode='r|', fileobj=resp.raw)
+        cart_tar.extractall(self.location)
+        cart_tar.close()
 
-        def pipefds():
-            """Setup a pipe but return file objects instead."""
-            rfd, wfd = pipe()
-            rfd = fdopen(rfd, 'rb')
-            wfd = fdopen(wfd, 'wb')
-            return (rfd, wfd)
-
-        rfd, wfd = pipefds()
-        tar_thread = Thread(target=unpack_tarfile, args=(rfd,))
-        tar_thread.daemon = True
-        tar_thread.start()
-        resp = requests.get('{}?filename={}'.format(cart_url, filename))
-        for chunk in resp.iter_content(1024 * 1024):
-            wfd.write(chunk)
-        wfd.close()
-        tar_thread.join()
+    def transactioninfo(self, transinfo, filename='data'):
+        """Handle transaction info and download the cart."""
+        self._download_from_url(
+            self.cart_api.wait_for_cart(
+                self.cart_api.setup_cart(
+                    TransactionInfo.yield_files(transinfo)
+                )
+            ),
+            filename
+        )
 
     def cloudevent(self, cloudevent, filename='data'):
         """Handle a cloudevent and return a cart url."""
@@ -52,4 +44,3 @@ class Downloader(object):
             ),
             filename
         )
-# pylint: enable=too-few-public-methods

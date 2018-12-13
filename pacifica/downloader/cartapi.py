@@ -29,9 +29,9 @@ class CartAPI(object):
         assert resp.status_code == 201
         return cart_url
 
-    def wait_for_cart(self, cart_url):
+    def wait_for_cart(self, cart_url, timeout=120):
         """Wait for cart completion to finish."""
-        while True:
+        while timeout > 0:
             resp = self.session.head(cart_url)
             resp_status = resp.headers['X-Pacifica-Status']
             resp_message = resp.headers['X-Pacifica-Message']
@@ -41,7 +41,8 @@ class CartAPI(object):
             if resp_code == 500:  # pragma: no cover
                 logging.error(resp_message)
                 break
-            time.sleep(2)
+            time.sleep(1)
+            timeout -= 1
         assert resp_status == 'ready'
         assert resp_code == 204
         return cart_url
