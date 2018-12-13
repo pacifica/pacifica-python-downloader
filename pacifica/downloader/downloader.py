@@ -11,14 +11,18 @@ from .policy import TransactionInfo
 class Downloader(object):
     """Downloader Class."""
 
-    def __init__(self, location, cart_api_url):
+    def __init__(self, location, cart_api_url, **kwargs):
         """Create the downloader given directory location."""
         self.location = location
-        self.cart_api = CartAPI(cart_api_url)
+        self.auth = kwargs.get('auth', {})
+        self.cart_api = CartAPI(cart_api_url, auth=self.auth)
 
     def _download_from_url(self, cart_url, filename):
         """Download the cart from the url."""
-        resp = requests.get('{}?filename={}'.format(cart_url, filename), stream=True)
+        resp = requests.get(
+            '{}?filename={}'.format(cart_url, filename),
+            stream=True, **self.auth
+        )
         cart_tar = tarfile.open(name=None, mode='r|', fileobj=resp.raw)
         cart_tar.extractall(self.location)
         cart_tar.close()

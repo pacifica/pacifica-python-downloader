@@ -15,6 +15,7 @@ class CartAPI(object):
         """Constructor for cart api."""
         self.cart_api_url = cart_api_url
         self.session = kwargs.get('session', requests.Session())
+        self.auth = kwargs.get('auth', {})
 
     def setup_cart(self, yield_files):
         """Setup a cart from the cloudevent object return url to the download."""
@@ -24,7 +25,8 @@ class CartAPI(object):
             data=dumps({
                 'fileids': [file_obj for file_obj in yield_files()]
             }),
-            headers={'Content-Type': 'application/json'}
+            headers={'Content-Type': 'application/json'},
+            **self.auth
         )
         assert resp.status_code == 201
         return cart_url
@@ -32,7 +34,7 @@ class CartAPI(object):
     def wait_for_cart(self, cart_url, timeout=120):
         """Wait for cart completion to finish."""
         while timeout > 0:
-            resp = self.session.head(cart_url)
+            resp = self.session.head(cart_url, **self.auth)
             resp_status = resp.headers['X-Pacifica-Status']
             resp_message = resp.headers['X-Pacifica-Message']
             resp_code = resp.status_code
