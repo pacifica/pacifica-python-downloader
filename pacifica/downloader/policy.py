@@ -9,7 +9,12 @@ class TransactionInfo(object):
 
     @staticmethod
     def yield_files(transinfo):
-        """returned lambda method for yield files."""
+        """
+        Return a method for yield files.
+
+        The files are part of a 'files' key that contains a
+        dictionary that is keyed off the files ID.
+        """
         def ce_yield_files():
             """yield files from a cloudevent object."""
             for file_id, file_obj in transinfo.get('files', {}).items():

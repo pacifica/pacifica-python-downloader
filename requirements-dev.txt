@@ -6,7 +6,7 @@ pacifica-metadata
 pacifica-policy
 pep257
 pre-commit
-pre-commit
 pylint<2.0
 pytest
+recommonmark
 setuptools
