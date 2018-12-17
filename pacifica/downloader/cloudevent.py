@@ -9,7 +9,13 @@ class CloudEvent(object):
 
     @staticmethod
     def yield_files(cloudevent):
-        """returned lambda method for yield files."""
+        """
+        Returned a method for yield files.
+
+        The cloud event passed contains a 'data' key that is a flat
+        list of metadata objects. Some of those objects are destined
+        for the 'Files' table.
+        """
         def ce_yield_files():
             """yield files from a cloudevent object."""
             for obj in cloudevent.get('data', []):
