@@ -29,6 +29,7 @@ install:
       redis-64\tools\redis-server.exe --service-start;
       python -m pip install -r requirements-dev.txt;
       python -m pip install 'redis<3.0';
+      echo 'Done';
 
 build: off
 
