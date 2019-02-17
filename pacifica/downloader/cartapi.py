@@ -27,7 +27,11 @@ class CartAPI(object):
         dictionary can be passed via keyword arguments.
         """
         self.cart_api_url = cart_api_url
-        self.session = kwargs.get('session', requests.Session())
+        adapter = requests.adapters.HTTPAdapter(max_retries=5)
+        session = requests.Session()
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
+        self.session = kwargs.get('session', session)
         self.auth = kwargs.get('auth', {})
 
     def setup_cart(self, yield_files):
