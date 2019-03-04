@@ -16,10 +16,10 @@ class TestDownloader(TestCase):
     def test_download_policy(self):
         """Test the download with policy."""
         down_path = mkdtemp()
-        down = Downloader(down_path, 'http://127.0.0.1:8081')
+        down = Downloader('http://127.0.0.1:8081')
         resp = requests.get('http://127.0.0.1:8181/status/transactions/by_id/67')
         self.assertEqual(resp.status_code, 200)
-        down.transactioninfo(resp.json())
+        down.transactioninfo(down_path, resp.json())
         self.assertTrue(exists(join(down_path, 'data', 'a', 'b', 'foo.txt')))
         self.assertTrue(exists(join(down_path, 'data', 'a', 'b', 'bar.txt')))
         rmtree(down_path)
@@ -44,8 +44,8 @@ class TestDownloader(TestCase):
             ]
         }
         down_path = mkdtemp()
-        down = Downloader(down_path, 'http://127.0.0.1:8081')
-        down.cloudevent(cloud_event_stub)
+        down = Downloader('http://127.0.0.1:8081')
+        down.cloudevent(down_path, cloud_event_stub)
         for file_id in range(1100, 1110):
             self.assertTrue(
                 exists(join(down_path, 'data', 'subdir_{}'.format(file_id), 'file.{}.txt'.format(file_id))))
