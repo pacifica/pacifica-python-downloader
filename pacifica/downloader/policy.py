@@ -20,7 +20,7 @@ class TransactionInfo(object):
             for file_id, file_obj in transinfo.get('files', {}).items():
                 yield {
                     'id': file_id,
-                    'path': '{}/{}'.format(
+                    'path': u'{}/{}'.format(
                         file_obj.get('subdir', ''),
                         file_obj.get('name', False)
                     ),

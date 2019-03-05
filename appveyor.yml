@@ -28,7 +28,7 @@ install:
       redis-64\tools\redis-server.exe --service-install;
       redis-64\tools\redis-server.exe --service-start;
       python -m pip install -r requirements-dev.txt;
-      python -m pip install 'redis<3.0';
+      python -m pip install 'redis';
       echo 'Done';
 
 build: off
@@ -76,5 +76,5 @@ test_script:
       pre-commit run -a;
       pip install .;
       cd tests;
-      coverage run --include='*/site-packages/pacifica/downloader/*' -m pytest -v;
+      coverage run --include='*/site-packages/pacifica/downloader/*' -m pytest -xv;
       coverage report -m --fail-under=100;

@@ -21,7 +21,7 @@ class TestDownloader(TestCase):
         self.assertEqual(resp.status_code, 200)
         down.transactioninfo(down_path, resp.json())
         self.assertTrue(exists(join(down_path, 'data', 'a', 'b', 'foo.txt')))
-        self.assertTrue(exists(join(down_path, 'data', 'a', 'b', 'bar.txt')))
+        self.assertTrue(exists(join(down_path, 'data', 'a', 'b', u'\u00e9', u'bar\u00e9.txt')))
         rmtree(down_path)
 
     def test_download_cloudevent(self):
