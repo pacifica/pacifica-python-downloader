@@ -98,7 +98,8 @@ class CartAPI(CommonBase):
             resp_status = resp.headers['X-Pacifica-Status']
             resp_message = resp.headers['X-Pacifica-Message']
             resp_code = resp.status_code
-            LOGGER.debug('CartAPI Wait Resp %s code %s status %s message %s', resp.json(), resp_code, resp_status, resp_message.replace('"', '\\"'))
+            LOGGER.debug('CartAPI Wait Resp %s code %s status %s message %s', resp.json(),
+                         resp_code, resp_status, resp_message.replace('"', '\\"'))
             if resp_code == 204 and resp_status != 'staging':
                 break
             if resp_code == 500:  # pragma: no cover
