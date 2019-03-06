@@ -14,10 +14,10 @@ download the data to.
 from tempfile import mkdtemp
 
 down_path = mkdtemp()
-down = Downloader(down_path, 'http://127.0.0.1:8081')
+down = Downloader('http://127.0.0.1:8081')
 resp = requests.get('http://127.0.0.1:8181/status/transactions/by_id/67')
 assert resp.status_code == 200
-down.transactioninfo(resp.json())
+down.transactioninfo(down_path, resp.json())
 ```
 
 ## Download Cloud Event
@@ -39,8 +39,8 @@ class Root(object):
     def POST(self):
         """Accept the cloud event data and return the local download path."""
         down_path = mkdtemp()
-        down = Downloader(down_path, 'http://127.0.0.1:8081')
-        down.cloudevent(cherrpy.request.json)
+        down = Downloader('http://127.0.0.1:8081')
+        down.cloudevent(down_path, cherrpy.request.json)
         return { 'download_path': down_path }
 
 
