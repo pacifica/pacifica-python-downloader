@@ -58,6 +58,13 @@ class CartAPI(CommonBase):
 
         LOGGER.debug('CartAPI URL %s auth %s', self._cart_api_url, self._auth)
 
+    @property
+    def auth(self):
+        """
+        Returns the requests authentication dictionary.
+        """
+        return self._auth
+
     def setup_cart(self, yield_files):
         """
         Setup a cart from the method and return url to the download.

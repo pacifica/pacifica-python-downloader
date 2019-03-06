@@ -34,7 +34,7 @@ class Downloader(object):
         """
         resp = requests.get(
             '{}?filename={}'.format(cart_url, filename),
-            stream=True, **self.cart_api._auth
+            stream=True, **self.cart_api.auth
         )
         cart_tar = tarfile.open(name=None, mode='r|', fileobj=resp.raw)
         cart_tar.extractall(location)
