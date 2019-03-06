@@ -60,9 +60,7 @@ class CartAPI(CommonBase):
 
     @property
     def auth(self):
-        """
-        Returns the requests authentication dictionary.
-        """
+        """Return the requests authentication dictionary."""
         return self._auth
 
     def setup_cart(self, yield_files):
