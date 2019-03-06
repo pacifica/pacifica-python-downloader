@@ -5,7 +5,6 @@ import logging
 from uuid import uuid4 as uuid
 import time
 from json import dumps
-import requests
 from .common import CommonBase
 
 
