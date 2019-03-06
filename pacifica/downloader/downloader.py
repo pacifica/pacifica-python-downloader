@@ -12,10 +12,9 @@ class Downloader(object):
     """
     Downloader Class.
 
-    The constructor takes two arguments `location` and
-    `cart_api_url`. The `location` is a download directory to be
-    created by a download method. The `cart_api_url` is the endpoint
-    for creating carts.
+    The constructor takes one argument `location`.
+    The `location` is a download directory to be created by a download method.
+    Keyword arguments are delegated to the CartAPI constructor.
 
     The other methods in this class are the supported
     download methods. Each method takes appropriate input for that
@@ -23,11 +22,10 @@ class Downloader(object):
     defined in the constructor.
     """
 
-    def __init__(self, location, cart_api_url, **kwargs):
+    def __init__(self, location, **kwargs):
         """Create the downloader given directory location."""
         self.location = location
-        self.auth = kwargs.get('auth', {})
-        self.cart_api = CartAPI(cart_api_url, auth=self.auth)
+        self.cart_api = CartAPI(**kwargs)
 
     def _download_from_url(self, cart_url, filename):
         """
@@ -37,7 +35,7 @@ class Downloader(object):
         """
         resp = requests.get(
             '{}?filename={}'.format(cart_url, filename),
-            stream=True, **self.auth
+            stream=True, **self.cart_api._auth
         )
         cart_tar = tarfile.open(name=None, mode='r|', fileobj=resp.raw)
         cart_tar.extractall(self.location)

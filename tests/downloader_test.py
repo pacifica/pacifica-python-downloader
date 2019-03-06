@@ -16,7 +16,7 @@ class TestDownloader(TestCase):
     def test_download_policy(self):
         """Test the download with policy."""
         down_path = mkdtemp()
-        down = Downloader(down_path, 'http://127.0.0.1:8081')
+        down = Downloader(down_path, cart_api_url='http://127.0.0.1:8081')
         resp = requests.get('http://127.0.0.1:8181/status/transactions/by_id/67')
         self.assertEqual(resp.status_code, 200)
         down.transactioninfo(resp.json())
@@ -44,7 +44,7 @@ class TestDownloader(TestCase):
             ]
         }
         down_path = mkdtemp()
-        down = Downloader(down_path, 'http://127.0.0.1:8081')
+        down = Downloader(down_path, cart_api_url='http://127.0.0.1:8081')
         down.cloudevent(cloud_event_stub)
         for file_id in range(1100, 1110):
             self.assertTrue(

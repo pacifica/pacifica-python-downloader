@@ -6,9 +6,13 @@ from uuid import uuid4 as uuid
 import time
 from json import dumps
 import requests
+from .common import CommonBase
 
 
-class CartAPI(object):
+LOGGER = logging.getLogger(__name__)
+
+
+class CartAPI(CommonBase):
     """
     Cart api object for manipulating carts.
 
@@ -16,7 +20,13 @@ class CartAPI(object):
     for completion.
     """
 
-    def __init__(self, cart_api_url, **kwargs):
+    _proto = None
+    _addr = None
+    _port = None
+    _cart_api_url = None
+    _auth = None
+
+    def __init__(self, **kwargs):
         """
         Constructor for cart api.
 
@@ -26,13 +36,28 @@ class CartAPI(object):
         keyword arguments. Also, an optional requests authentication
         dictionary can be passed via keyword arguments.
         """
-        self.cart_api_url = cart_api_url
-        adapter = requests.adapters.HTTPAdapter(max_retries=5)
-        session = requests.Session()
-        session.mount('http://', adapter)
-        session.mount('https://', adapter)
-        self.session = kwargs.get('session', session)
-        self.auth = kwargs.get('auth', {})
+        super(CartAPI, self).__init__()
+
+        self._setup_requests_session()
+        self.session = kwargs.get('session', self.session)
+
+        self._server_url(
+            [
+                ('proto', 'http'),
+                ('port', '8081'),
+                ('addr', '127.0.0.1'),
+                ('cart_api_url', None),
+            ],
+            'CART',
+            kwargs
+        )
+
+        if self._cart_api_url is None:
+            self._cart_api_url = '{}://{}:{}'.format(self._proto, self._addr, self._port)
+
+        self._auth = kwargs.get('auth', {})
+
+        LOGGER.debug('CartAPI URL %s auth %s', self._cart_api_url, self._auth)
 
     def setup_cart(self, yield_files):
         """
@@ -43,14 +68,14 @@ class CartAPI(object):
         the `Cartd API <https://github.com/pacifica/pacifica-cartd>`_.
         This method returns the full url to the cart created.
         """
-        cart_url = '{}/{}'.format(self.cart_api_url, uuid())
+        cart_url = '{}/{}'.format(self._cart_api_url, uuid())
         resp = self.session.post(
             cart_url,
             data=dumps({
                 'fileids': [file_obj for file_obj in yield_files()]
             }),
             headers={'Content-Type': 'application/json'},
-            **self.auth
+            **self._auth
         )
         assert resp.status_code == 201
         return cart_url
@@ -64,7 +89,7 @@ class CartAPI(object):
         ready to download.
         """
         while timeout > 0:
-            resp = self.session.head(cart_url, **self.auth)
+            resp = self.session.head(cart_url, **self._auth)
             resp_status = resp.headers['X-Pacifica-Status']
             resp_message = resp.headers['X-Pacifica-Message']
             resp_code = resp.status_code
