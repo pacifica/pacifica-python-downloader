@@ -48,7 +48,7 @@ class CartAPI(CommonBase):
                 ('addr', '127.0.0.1'),
                 ('cart_api_url', None),
             ],
-            'CART',
+            'CARTD',
             kwargs
         )
 
