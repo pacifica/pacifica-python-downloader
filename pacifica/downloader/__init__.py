@@ -10,4 +10,4 @@ Cartd service.
 from __future__ import absolute_import
 from .downloader import Downloader
 
-__all__ = ['Downloader']
+__all__ = ('Downloader')
