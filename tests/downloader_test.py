@@ -16,7 +16,7 @@ class TestDownloader(TestCase):
     def test_cart_api_url(self):
         """Test the CartAPI URL."""
         down = Downloader(proto='http', addr='127.0.0.1', port=8081)
-        self.assertEqual(down.cart_api._cart_api_url, 'http://127.0.0.1:8081')
+        self.assertEqual(down.cart_api.cart_api_url, 'http://127.0.0.1:8081')
 
     def test_download_policy(self):
         """Test the download with policy."""

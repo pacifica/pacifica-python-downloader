@@ -63,6 +63,11 @@ class CartAPI(CommonBase):
         """Return the requests authentication dictionary."""
         return self._auth
 
+    @property
+    def cart_api_url(self):
+        """Return the CartAPI URL."""
+        return self._cart_api_url
+
     def setup_cart(self, yield_files):
         """
         Setup a cart from the method and return url to the download.
