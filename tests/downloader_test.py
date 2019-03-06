@@ -13,10 +13,15 @@ from pacifica.downloader import Downloader
 class TestDownloader(TestCase):
     """Test the Downloader class."""
 
+    def test_cart_api_url(self):
+        """Test the CartAPI URL."""
+        down = Downloader(proto='http', addr='127.0.0.1', port=8081)
+        self.assertEqual(down.cart_api.cart_api_url, 'http://127.0.0.1:8081')
+
     def test_download_policy(self):
         """Test the download with policy."""
         down_path = mkdtemp()
-        down = Downloader('http://127.0.0.1:8081')
+        down = Downloader(cart_api_url='http://127.0.0.1:8081')
         resp = requests.get('http://127.0.0.1:8181/status/transactions/by_id/67')
         self.assertEqual(resp.status_code, 200)
         down.transactioninfo(down_path, resp.json())
@@ -44,7 +49,7 @@ class TestDownloader(TestCase):
             ]
         }
         down_path = mkdtemp()
-        down = Downloader('http://127.0.0.1:8081')
+        down = Downloader(cart_api_url='http://127.0.0.1:8081')
         down.cloudevent(down_path, cloud_event_stub)
         for file_id in range(1100, 1110):
             self.assertTrue(

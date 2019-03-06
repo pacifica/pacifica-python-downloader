@@ -8,6 +8,6 @@ internal classes to pull the metadata required to interact with the
 Cartd service.
 """
 from __future__ import absolute_import
-from .downloader import Downloader
+from .downloader import Downloader  # noqa: F401
 
-__all__ = ['Downloader']
+__all__ = ('Downloader')
