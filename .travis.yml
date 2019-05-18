@@ -1,13 +1,10 @@
 language: python
+dist: xenial
 addons:
   apt:
-    sources:
-    - elasticsearch-5.x
     packages:
-    - elasticsearch
-    - oracle-java8-set-default
+    - rabbitmq-server
 services:
-- elasticsearch
 - postgresql
 - rabbitmq
 env:
