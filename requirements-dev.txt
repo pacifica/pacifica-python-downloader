@@ -1,5 +1,4 @@
-codeclimate-test-reporter
-coverage>4.0,<4.4
+coverage
 pacifica-archiveinterface
 pacifica-cartd
 pacifica-metadata
@@ -9,4 +8,3 @@ pre-commit
 pylint<2.0
 pytest
 recommonmark
-setuptools
