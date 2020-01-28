@@ -4,7 +4,7 @@
 import logging
 from uuid import uuid4 as uuid
 import time
-from json import dumps
+from json import dumps, loads
 from .common import CommonBase
 
 
@@ -24,6 +24,7 @@ class CartAPI(CommonBase):
     _port = None
     _cart_api_url = None
     _auth = None
+    _extra_args = None
 
     def __init__(self, **kwargs):
         """
@@ -55,6 +56,7 @@ class CartAPI(CommonBase):
             self._cart_api_url = '{}://{}:{}'.format(self._proto, self._addr, self._port)
 
         self._auth = kwargs.get('auth', {})
+        self._extra_args = kwargs.get('extra_args', {})
 
         LOGGER.debug('CartAPI URL %s auth %s', self._cart_api_url, self._auth)
 
@@ -78,11 +80,11 @@ class CartAPI(CommonBase):
         This method returns the full url to the cart created.
         """
         cart_url = '{}/{}'.format(self._cart_api_url, uuid())
+        data = {key: loads(dumps(self._extra_args[key])) for key in self._extra_args.items()}
+        data['fileids'] = list(yield_files())
         resp = self.session.post(
             cart_url,
-            data=dumps({
-                'fileids': list(yield_files())
-            }),
+            data=dumps(data),
             headers={'Content-Type': 'application/json'},
             **self._auth
         )
