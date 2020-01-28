@@ -28,11 +28,20 @@ jobs:
   - stage: lint
     before_script: skip
     script: pre-commit run -a
+  - python: 3.7
+    before_script: skip
+    script: pre-commit run -a
+  - python: 3.8
+    before_script: skip
+    script: pre-commit run -a
   - stage: test
+  - python: 3.7
+  - python: 3.8
   - stage: deploy
     services: []
     before_script: skip
     script: skip
+    python: 3.8
     deploy:
       skip_cleanup: true
       provider: pypi
