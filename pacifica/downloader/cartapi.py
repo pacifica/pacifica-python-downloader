@@ -81,7 +81,7 @@ class CartAPI(CommonBase):
         resp = self.session.post(
             cart_url,
             data=dumps({
-                'fileids': [file_obj for file_obj in yield_files()]
+                'fileids': list(yield_files())
             }),
             headers={'Content-Type': 'application/json'},
             **self._auth

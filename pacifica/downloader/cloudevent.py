@@ -4,7 +4,7 @@
 
 
 # pylint: disable=too-few-public-methods
-class CloudEvent(object):
+class CloudEvent:
     """Cloud Event Parser."""
 
     @staticmethod

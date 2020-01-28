@@ -8,7 +8,7 @@ from .cartapi import CartAPI
 from .policy import TransactionInfo
 
 
-class Downloader(object):
+class Downloader:
     """
     Downloader Class.
 
