@@ -4,7 +4,7 @@
 
 
 # pylint: disable=too-few-public-methods
-class TransactionInfo(object):
+class TransactionInfo:
     """Cloud Event Parser."""
 
     @staticmethod

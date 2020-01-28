@@ -5,6 +5,6 @@ pacifica-metadata
 pacifica-policy
 pep257
 pre-commit
-pylint<2.0
+pylint
 pytest
 recommonmark
