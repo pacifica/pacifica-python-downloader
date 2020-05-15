@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2020-05-15
+### Changed
+- Fix #24 Add kwargs to Downloader by [dmlb2000](https://github.com/dmlb2000)
+- Pull #29 Remove Requirements Pip>=20 by [dmlb2000](https://github.com/dmlb2000)
+
 ## [0.4.0] - 2020-01-28
 ### Added
 - Pull #22 Add Python 3.7 and 3.8 by [dmlb2000](https://github.com/dmlb2000)
