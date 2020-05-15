@@ -24,12 +24,13 @@ install:
       Invoke-WebRequest -Uri "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.5.zip" -OutFile "elasticsearch.zip";
       Expand-Archive "elasticsearch.zip" -DestinationPath "C:\elasticsearch";
       Start-Process C:\elasticsearch\elasticsearch-5.6.5\bin\elasticsearch;
-      python -m pip install --upgrade pip setuptools wheel;
       nuget install redis-64 -excludeversion;
       redis-64\tools\redis-server.exe --service-install;
       redis-64\tools\redis-server.exe --service-start;
-      python -m pip install -r requirements-dev.txt;
-      python -m pip install 'redis';
+      python -m pip install --upgrade pip setuptools wheel;
+      pip install -r requirements-dev.txt;
+      pip install .;
+      pip install 'redis';
       echo 'Done';
 
 build: off
@@ -75,7 +76,6 @@ test_script:
       $env:ARCHIVE_INTERFACE_URL = 'http://127.0.0.1:8080/';
       mkdir C:\tmp; C:\pacifica\Scripts\activate.ps1;
       pre-commit run -a;
-      pip install .;
       cd tests;
       coverage run --include='*/site-packages/pacifica/downloader/*' -m pytest -xv;
       coverage report -m --fail-under=100;
