@@ -40,7 +40,7 @@ class Downloader:
         cart_tar.extractall(location)
         cart_tar.close()
 
-    def transactioninfo(self, location, transinfo, filename='data'):
+    def transactioninfo(self, location, transinfo, **kwargs):
         """
         Handle transaction info and download the data in a cart.
 
@@ -52,12 +52,13 @@ class Downloader:
             self.cart_api.wait_for_cart(
                 self.cart_api.setup_cart(
                     TransactionInfo.yield_files(transinfo)
-                )
+                ),
+                int(kwargs.get('timeout', 120))
             ),
-            filename
+            kwargs.get('filename', 'data')
         )
 
-    def cloudevent(self, location, cloudevent, filename='data'):
+    def cloudevent(self, location, cloudevent, **kwargs):
         """
         Handle a cloud event and download the data in a cart.
 
@@ -73,7 +74,8 @@ class Downloader:
             self.cart_api.wait_for_cart(
                 self.cart_api.setup_cart(
                     CloudEvent.yield_files(cloudevent)
-                )
+                ),
+                int(kwargs.get('timeout', 120))
             ),
-            filename
+            kwargs.get('filename', 'data')
         )
